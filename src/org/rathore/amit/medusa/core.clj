@@ -44,3 +44,6 @@
 (defrunonce start-supervisor []
   (if *SUPERVISOR-ENABLED*
     (future (supervise SUPERVISE-EVERY-MILLIS))))
+
+(defn shutdown-medusa []
+  (.shutdown THREADPOOL))
