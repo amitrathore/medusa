@@ -4,6 +4,7 @@
            java.util.concurrent.Executors))
 
 (def THREAD-TIMEOUT-MILLIS 20000)
+(def *SUPERVISOR-ENABLED* true)
 (def SUPERVISE-EVERY-MILLIS 10000)
 (def MEDUSA-THREADPOOL-SIZE (* 3 (.availableProcessors (Runtime/getRuntime))))
 (def THREADPOOL (Executors/newFixedThreadPool MEDUSA-THREADPOOL-SIZE))
@@ -41,4 +42,5 @@
     (Thread/sleep repeat-after-millis)))
 
 (defrunonce start-supervisor []
-  (future (supervise SUPERVISE-EVERY-MILLIS)))
+  (if *SUPERVISOR-ENABLED*
+    (future (supervise SUPERVISE-EVERY-MILLIS))))
