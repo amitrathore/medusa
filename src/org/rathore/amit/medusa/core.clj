@@ -1,5 +1,6 @@
 (ns org.rathore.amit.medusa.core
-  (:use org.rathore.amit.utils.clojure)
+  (:use org.rathore.amit.utils.clojure
+        org.rathore.amit.medusa.utils)
   (:import java.util.concurrent.ExecutorService
            java.util.concurrent.Executors))
 
@@ -18,11 +19,16 @@
 (defn mark-completion [future-id]
   (dosync (alter running-futures dissoc future-id)))
 
-(defn medusa-future [future-id thunk]
+(defn medusa-future-thunk [future-id thunk]
   (let [work (fn []
                (claim-thread future-id)
                (thunk))]
     (.submit THREADPOOL work)))
+
+(defmacro medusa-future [& body]
+  (let [f (fn [] (do ~@body))
+        id (random-uuid)]
+    `(medusa-future ~id ~f)))
 
 (defn preempt-medusa-future [[future-id {:keys [thread]}]]
   (.interrupt thread)
