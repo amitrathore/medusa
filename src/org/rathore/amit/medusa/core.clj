@@ -7,10 +7,19 @@
 (def THREAD-TIMEOUT-MILLIS 20000)
 (def *SUPERVISOR-ENABLED* true)
 (def SUPERVISE-EVERY-MILLIS 10000)
-(def MEDUSA-THREADPOOL-SIZE (* 3 (.availableProcessors (Runtime/getRuntime))))
-(def THREADPOOL (Executors/newFixedThreadPool MEDUSA-THREADPOOL-SIZE))
+(def *MEDUSA-THREADPOOL-SIZE* (* 3 (.availableProcessors (Runtime/getRuntime))))
+(def THREADPOOL)
 
 (def running-futures (ref {}))
+
+(defn new-fixed-threadpool [size]
+  (Executors/newFixedThreadPool size))
+
+(defrunonce init-medusa 
+  ([]
+     (def THREADPOOL (new-fixed-threadpool *MEDUSA-THREADPOOL-SIZE*)))
+  ([pool-size]
+     (def THREADPOOL (new-fixed-threadpool pool-size))))
 
 (defn claim-thread [future-id]
   (let [thread-info {:thread (Thread/currentThread) :future-id future-id :started (System/currentTimeMillis)}]
