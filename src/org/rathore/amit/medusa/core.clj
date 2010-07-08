@@ -27,9 +27,7 @@
     (.submit THREADPOOL work)))
 
 (defmacro medusa-future [& body]
-  (let [f (fn [] (do ~@body))
-        id (random-uuid)]
-    `(medusa-future-thunk ~id ~f)))
+  `(medusa-future-thunk (random-uuid) (fn [] (do ~@body))))
 
 (defn preempt-medusa-future [[future-id {:keys [thread]}]]
   (.interrupt thread)
