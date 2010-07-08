@@ -18,10 +18,11 @@
 (defn mark-completion [future-id]
   (dosync (alter running-futures dissoc future-id)))
 
-(defn medusa-future [future-id thunk]
+(defn medusa-future-thunk [future-id thunk]
   (let [work (fn []
                (claim-thread future-id)
-               (thunk))]
+               (thunk)
+               (mark-completion future-id))]
     (.submit THREADPOOL work)))
 
 (defn preempt-medusa-future [[future-id {:keys [thread]}]]

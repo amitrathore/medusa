@@ -10,3 +10,5 @@ classes
 classes/*
 lib
 lib/*
+pom.xml
+medusa.jar
