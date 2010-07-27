@@ -61,3 +61,6 @@
 
 (defn shutdown-medusa []
   (.shutdown THREADPOOL))
+
+(defn number-of-queued-tasks []
+  (.size (.getQueue THREADPOOL)))
