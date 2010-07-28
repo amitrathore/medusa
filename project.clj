@@ -1,4 +1,4 @@
-(defproject org.clojars.runa/medusa "0.1.4"
+(defproject org.clojars.runa/medusa "0.1.5"
   :description "A supervised threadpool for clojure futures"
   :url "http://github.com/amitrathore/medusa"
   :dependencies [[org.clojure/clojure "1.1.0"]
