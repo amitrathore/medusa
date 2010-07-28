@@ -64,3 +64,9 @@
 
 (defn number-of-queued-tasks []
   (.size (.getQueue THREADPOOL)))
+
+(defn current-pool-size []
+  (.getPoolSize THREADPOOL))
+
+(defn completed-task-count []
+  (.getCompletedTaskCount THREADPOOL))
