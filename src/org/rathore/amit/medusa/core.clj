@@ -70,3 +70,6 @@
 
 (defn completed-task-count []
   (.getCompletedTaskCount THREADPOOL))
+
+(defn futures-count []
+  (count @running-futures))
