@@ -31,12 +31,17 @@
 (defn medusa-future-thunk [future-id thunk]
   (let [work (fn []
                (claim-thread future-id)
-               (thunk)
-               (mark-completion future-id))]
+               (let [val (thunk)]
+                 (mark-completion future-id)
+                 val))]
     (.submit THREADPOOL work)))
 
 (defmacro medusa-future [& body]
   `(medusa-future-thunk (random-uuid) (fn [] (do ~@body))))
+
+(defn medusa-pmap [f coll]
+  (let [seq-of-futures (doall (map #(medusa-future (f %)) coll))]
+    (map (fn [java-future] (.get java-future)) seq-of-futures)))
 
 (defn preempt-medusa-future [[future-id {:keys [thread]}]]
   (.interrupt thread)
