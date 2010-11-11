@@ -4,9 +4,9 @@
   (:import java.util.concurrent.ExecutorService
            java.util.concurrent.Executors))
 
-(def THREAD-TIMEOUT-MILLIS 20000)
+(def *FUTURE-TIMEOUT-MILLIS* 20000)
 (def *SUPERVISOR-ENABLED* true)
-(def SUPERVISE-EVERY-MILLIS 10000)
+(def *SUPERVISE-EVERY-MILLIS* 10000)
 (def *MEDUSA-THREADPOOL-SIZE* (* 3 (.availableProcessors (Runtime/getRuntime))))
 (def THREADPOOL)
 
@@ -48,7 +48,7 @@
   (mark-completion future-id))
 
 (defn running-over? [[_ {:keys [started]}]]
-  (> (- (System/currentTimeMillis) started) THREAD-TIMEOUT-MILLIS))
+  (> (- (System/currentTimeMillis) started) *FUTURE-TIMEOUT-MILLIS*))
 
 (defn preempt-old-futures []
   (let [to-preempt (filter running-over? @running-futures)]
@@ -62,7 +62,7 @@
 
 (defrunonce start-supervisor []
   (if *SUPERVISOR-ENABLED*
-    (future (supervise SUPERVISE-EVERY-MILLIS))))
+    (future (supervise *SUPERVISE-EVERY-MILLIS*))))
 
 (defn shutdown-medusa []
   (.shutdown THREADPOOL))
