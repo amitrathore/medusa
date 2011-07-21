@@ -79,8 +79,15 @@
 (defn completed-task-count []
   (.getCompletedTaskCount THREADPOOL))
 
+(defn active-thread-count []
+  (.getActiveCount THREADPOOL))
+
 (defn futures-count []
   (count @running-futures))
 
 (defn medusa-stats []
-  {:queued (number-of-queued-tasks) :current-threads (current-pool-size) :max-threads (max-pool-size) :completed (completed-task-count)})
+  {:queued (number-of-queued-tasks)
+   :current-threads (current-pool-size)
+   :max-threads (max-pool-size)
+   :completed (completed-task-count)
+   :active-threads (active-thread-count)})
