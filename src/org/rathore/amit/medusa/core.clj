@@ -91,3 +91,15 @@
    :max-threads (max-pool-size)
    :completed (completed-task-count)
    :active-threads (active-thread-count)})
+
+(defn await-completion [seconds]
+ (.awaitTermination THREADPOOL seconds java.util.concurrent.TimeUnit/SECONDS))
+
+(defn await-empty-queue
+ ([]
+    (await-empty-queue 100))
+ ([millis-step]
+    (loop [size (number-of-queued-tasks)]
+      (when-not (zero? size)
+        (Thread/sleep millis-step)
+        (recur (number-of-queued-tasks))))))
